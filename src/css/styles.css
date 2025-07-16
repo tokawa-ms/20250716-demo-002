@@ -1,0 +1,258 @@
+/* ロボットアニメ指令室風カスタムスタイル */
+
+/* グロー効果 */
+.glow-effect {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+.glow-effect:hover {
+    box-shadow: 0 0 30px rgba(0, 212, 255, 0.5);
+}
+
+.glow-effect-pink {
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+.glow-effect-pink:hover {
+    box-shadow: 0 0 30px rgba(236, 72, 153, 0.5);
+}
+
+.glow-effect-blue {
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+.glow-effect-blue:hover {
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.5);
+}
+
+.glow-effect-green {
+    box-shadow: 0 0 20px rgba(57, 255, 20, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+.glow-effect-green:hover {
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.5);
+}
+
+.glow-effect-purple {
+    box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+    transition: box-shadow 0.3s ease;
+}
+
+.glow-effect-purple:hover {
+    box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+}
+
+/* 吹き出しスタイル */
+.speech-bubble-pink {
+    background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(236, 72, 153, 0.05));
+    border: 1px solid rgba(236, 72, 153, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.speech-bubble-pink::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid rgba(236, 72, 153, 0.3);
+}
+
+.speech-bubble-blue {
+    background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(0, 245, 255, 0.05));
+    border: 1px solid rgba(0, 245, 255, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.speech-bubble-blue::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid rgba(0, 245, 255, 0.3);
+}
+
+.speech-bubble-green {
+    background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(57, 255, 20, 0.05));
+    border: 1px solid rgba(57, 255, 20, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.speech-bubble-green::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid rgba(57, 255, 20, 0.3);
+}
+
+.speech-bubble-purple {
+    background: linear-gradient(135deg, rgba(138, 43, 226, 0.1), rgba(138, 43, 226, 0.05));
+    border: 1px solid rgba(138, 43, 226, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.speech-bubble-purple::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 30px;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 15px solid rgba(138, 43, 226, 0.3);
+}
+
+/* アニメーション効果 */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes typing {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.typing-effect {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid;
+    animation: typing 2s steps(40, end);
+}
+
+/* スクロールバーのスタイリング */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1A1A2E;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #00D4FF;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #00A4CC;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .glow-effect,
+    .glow-effect-pink,
+    .glow-effect-blue,
+    .glow-effect-green,
+    .glow-effect-purple {
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+    }
+    
+    .speech-bubble-pink::before,
+    .speech-bubble-blue::before,
+    .speech-bubble-green::before {
+        left: 15px;
+        border-left-width: 8px;
+        border-right-width: 8px;
+        border-bottom-width: 8px;
+    }
+    
+    .speech-bubble-purple::before {
+        left: 20px;
+        border-left-width: 12px;
+        border-right-width: 12px;
+        border-bottom-width: 12px;
+    }
+}
+
+/* 状態インジケーター */
+.status-indicator {
+    transition: all 0.3s ease;
+}
+
+.status-waiting {
+    background-color: #6B7280;
+}
+
+.status-thinking {
+    background-color: #F59E0B;
+    animation: pulse 1s infinite;
+}
+
+.status-complete {
+    background-color: #10B981;
+}
+
+.status-error {
+    background-color: #EF4444;
+}
+
+/* テキスト効果 */
+.text-glow {
+    text-shadow: 0 0 10px currentColor;
+}
+
+/* ボタンホバー効果 */
+button:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* 入力フィールド効果 */
+input:focus,
+textarea:focus {
+    box-shadow: 0 0 0 2px rgba(0, 212, 255, 0.3);
+}
+
+/* 背景パターン */
+body {
+    background-image: 
+        radial-gradient(circle at 20% 80%, rgba(0, 245, 255, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(57, 255, 20, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+}

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マルチエージェント指令室 - Azure OpenAI チャットシステム</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-blue': '#00F5FF',
+                        'cyber-green': '#39FF14',
+                        'cyber-orange': '#FF6600',
+                        'cyber-purple': '#8A2BE2',
+                        'dark-bg': '#0A0A0F',
+                        'panel-bg': '#1A1A2E',
+                        'border-glow': '#00D4FF'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-dark-bg text-white min-h-screen font-mono">
+    <!-- Header -->
+    <header class="bg-panel-bg border-b-2 border-border-glow p-4">
+        <div class="container mx-auto">
+            <h1 class="text-3xl font-bold text-cyber-blue text-center">
+                🤖 マルチエージェント指令室 🚀
+            </h1>
+            <p class="text-center text-gray-300 mt-2">Azure OpenAI搭載 戦略アドバイザーシステム</p>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container mx-auto p-4 max-w-7xl">
+        <!-- Settings Panel -->
+        <div class="bg-panel-bg border border-border-glow rounded-lg p-4 mb-6 glow-effect">
+            <h2 class="text-xl font-bold text-cyber-green mb-4">🔧 Azure OpenAI 接続設定</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                    <label class="block text-sm font-bold mb-2 text-cyan-300">エンドポイント URL</label>
+                    <input 
+                        type="text" 
+                        id="endpoint" 
+                        placeholder="https://your-resource.openai.azure.com/" 
+                        class="w-full p-2 bg-dark-bg border border-cyber-blue rounded text-white focus:border-cyber-green focus:outline-none"
+                    >
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2 text-cyan-300">API キー</label>
+                    <input 
+                        type="password" 
+                        id="apiKey" 
+                        placeholder="あなたのAPIキーを入力してください" 
+                        class="w-full p-2 bg-dark-bg border border-cyber-blue rounded text-white focus:border-cyber-green focus:outline-none"
+                    >
+                </div>
+                <div>
+                    <label class="block text-sm font-bold mb-2 text-cyan-300">デプロイメント名</label>
+                    <input 
+                        type="text" 
+                        id="deployment" 
+                        placeholder="gpt-4o" 
+                        class="w-full p-2 bg-dark-bg border border-cyber-blue rounded text-white focus:border-cyber-green focus:outline-none"
+                    >
+                </div>
+            </div>
+            <button 
+                id="saveSettings" 
+                class="mt-4 bg-cyber-green text-dark-bg px-4 py-2 rounded font-bold hover:bg-green-400 transition-colors"
+            >
+                💾 設定を保存
+            </button>
+            <span id="settingsStatus" class="ml-4 text-sm"></span>
+        </div>
+
+        <!-- Question Input Panel -->
+        <div class="bg-panel-bg border border-border-glow rounded-lg p-4 mb-6 glow-effect">
+            <h2 class="text-xl font-bold text-cyber-orange mb-4">❓ 質問入力システム</h2>
+            <textarea 
+                id="question" 
+                placeholder="エージェントに質問してください（例：残業を月100時間することについてどう思いますか？）" 
+                class="w-full h-24 p-3 bg-dark-bg border border-cyber-blue rounded text-white focus:border-cyber-orange focus:outline-none resize-none"
+            ></textarea>
+            <div class="mt-4 flex justify-between items-center">
+                <button 
+                    id="submitQuestion" 
+                    class="bg-cyber-orange text-dark-bg px-6 py-3 rounded font-bold hover:bg-orange-500 transition-colors disabled:bg-gray-600 disabled:cursor-not-allowed"
+                    disabled
+                >
+                    🚀 エージェント分析開始
+                </button>
+                <div id="loadingStatus" class="text-cyber-blue hidden">
+                    <span class="animate-pulse">🔄 エージェント思考中...</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Agents Response Panel -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <!-- Agent Casper -->
+            <div class="bg-panel-bg border border-pink-500 rounded-lg p-4 glow-effect-pink">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-pink-500 rounded-full flex items-center justify-center text-2xl">
+                        💕
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-bold text-pink-400">カスパー</h3>
+                        <p class="text-sm text-gray-300">恋に溺れる感情的女性</p>
+                    </div>
+                </div>
+                <div id="casperResponse" class="speech-bubble-pink min-h-[100px] text-sm">
+                    <p class="text-gray-400 italic">待機中... 💭</p>
+                </div>
+                <div class="mt-2 text-xs text-gray-400">
+                    文字数: <span id="casperCount">0</span>/1000
+                </div>
+            </div>
+
+            <!-- Agent Melchior -->
+            <div class="bg-panel-bg border border-cyber-blue rounded-lg p-4 glow-effect-blue">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-cyber-blue rounded-full flex items-center justify-center text-2xl">
+                        🔬
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-bold text-cyber-blue">メルキオール</h3>
+                        <p class="text-sm text-gray-300">論理的女性科学者</p>
+                    </div>
+                </div>
+                <div id="melchiorResponse" class="speech-bubble-blue min-h-[100px] text-sm">
+                    <p class="text-gray-400 italic">分析準備中... 🧪</p>
+                </div>
+                <div class="mt-2 text-xs text-gray-400">
+                    文字数: <span id="melchiorCount">0</span>/1000
+                </div>
+            </div>
+
+            <!-- Agent Balthazar -->
+            <div class="bg-panel-bg border border-cyber-green rounded-lg p-4 glow-effect-green">
+                <div class="flex items-center mb-3">
+                    <div class="w-12 h-12 bg-cyber-green rounded-full flex items-center justify-center text-2xl text-dark-bg">
+                        👩‍👦
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-bold text-cyber-green">バルタザール</h3>
+                        <p class="text-sm text-gray-300">心配する母親</p>
+                    </div>
+                </div>
+                <div id="balthazarResponse" class="speech-bubble-green min-h-[100px] text-sm">
+                    <p class="text-gray-400 italic">息子を案じて思考中... 👶</p>
+                </div>
+                <div class="mt-2 text-xs text-gray-400">
+                    文字数: <span id="balthazarCount">0</span>/1000
+                </div>
+            </div>
+        </div>
+
+        <!-- Organizer Response Panel -->
+        <div class="bg-panel-bg border border-cyber-purple rounded-lg p-4 glow-effect-purple">
+            <div class="flex items-center mb-4">
+                <div class="w-16 h-16 bg-cyber-purple rounded-full flex items-center justify-center text-3xl">
+                    🎯
+                </div>
+                <div class="ml-4">
+                    <h3 class="text-2xl font-bold text-cyber-purple">オーガナイザー</h3>
+                    <p class="text-gray-300">統合分析・最終決定システム</p>
+                </div>
+            </div>
+            <div id="organizerResponse" class="speech-bubble-purple min-h-[150px]">
+                <p class="text-gray-400 italic">全エージェントの分析完了後に統合結果を表示します... 🤖</p>
+            </div>
+            <div class="mt-3 text-sm text-gray-400">
+                文字数: <span id="organizerCount">0</span>/3000
+            </div>
+        </div>
+
+        <!-- Status Panel -->
+        <div class="mt-6 bg-panel-bg border border-gray-600 rounded-lg p-4">
+            <h3 class="text-lg font-bold text-gray-300 mb-2">📊 システム状態</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div class="text-center">
+                    <div id="statusCasper" class="w-4 h-4 bg-gray-600 rounded-full mx-auto mb-1"></div>
+                    <span>カスパー</span>
+                </div>
+                <div class="text-center">
+                    <div id="statusMelchior" class="w-4 h-4 bg-gray-600 rounded-full mx-auto mb-1"></div>
+                    <span>メルキオール</span>
+                </div>
+                <div class="text-center">
+                    <div id="statusBalthazar" class="w-4 h-4 bg-gray-600 rounded-full mx-auto mb-1"></div>
+                    <span>バルタザール</span>
+                </div>
+                <div class="text-center">
+                    <div id="statusOrganizer" class="w-4 h-4 bg-gray-600 rounded-full mx-auto mb-1"></div>
+                    <span>オーガナイザー</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-panel-bg border-t-2 border-border-glow p-4 mt-8">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>© 2024 マルチエージェント指令室 | Azure OpenAI 搭載システム</p>
+            <p class="text-xs mt-1">⚠️ 本システムは技術デモ用です。APIキーは安全に管理してください。</p>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
