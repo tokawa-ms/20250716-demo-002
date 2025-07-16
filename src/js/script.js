@@ -53,6 +53,7 @@ class MultiAgentChatSystem {
         ['endpoint', 'apiKey', 'deployment'].forEach(id => {
             document.getElementById(id).addEventListener('input', () => {
                 this.validateSettings();
+                this.validateQuestion();
             });
         });
 
@@ -79,6 +80,7 @@ class MultiAgentChatSystem {
         localStorage.setItem('multiAgentSettings', JSON.stringify(this.settings));
         this.showStatus('settingsStatus', '✅ 設定が保存されました', 'text-cyber-green');
         this.validateSettings();
+        this.validateQuestion();
     }
 
     /**
@@ -92,6 +94,7 @@ class MultiAgentChatSystem {
             document.getElementById('apiKey').value = this.settings.apiKey;
             document.getElementById('deployment').value = this.settings.deployment;
             this.validateSettings();
+            this.validateQuestion();
         }
     }
 
@@ -104,7 +107,6 @@ class MultiAgentChatSystem {
         const deployment = document.getElementById('deployment').value.trim();
 
         const isValid = endpoint && apiKey && deployment;
-        this.validateQuestion();
         return isValid;
     }
 
